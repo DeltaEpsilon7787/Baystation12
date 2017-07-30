@@ -20,3 +20,4 @@ __pycache__
 config/*
 !config/*/
 .atom-build.json
+maps/exodus/tmp.dmm

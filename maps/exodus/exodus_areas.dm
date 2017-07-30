@@ -816,6 +816,10 @@
 	name = "\improper Security - Solitary 2"
 	icon_state = "sec_prison"
 
+/area/security/brig/restroom
+	name = "\improper Security - Restrooms"
+	icon_state = "sec_prison"
+
 /area/security/brig/prison_break()
 	for(var/obj/structure/closet/secure_closet/brig/temp_closet in src)
 		temp_closet.locked = 0
@@ -828,9 +832,27 @@
 	name = "\improper Security - Prison Wing Restroom"
 	icon_state = "sec_prison"
 
+/area/security/prison/main
+	name = "\improper Security - Prison Wing Main Chamber"
+	icon_state = "sec_prison"
+
 /area/security/prison/dorm
 	name = "\improper Security - Prison Wing Dormitory"
 	icon_state = "sec_prison"
+
+/area/security/prison/hallway
+	name = "\improper Security - Prison Wing Hallway"
+	icon_state = "sec_prison"
+
+/area/security/prison/shielded
+	name = "\improper Security - Prison Wing Radiation Shelter"
+	icon_state = "sec_prison"
+	flags = AREA_RAD_SHIELDED
+
+/area/security/prison/punishment
+	name = "\improper Security - Prison Wing Chastisement"
+	icon_state = "sec_prison"
+
 
 /area/security/prison/prison_break()
 	for(var/obj/structure/closet/secure_closet/brig/temp_closet in src)
