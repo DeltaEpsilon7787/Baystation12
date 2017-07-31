@@ -321,6 +321,12 @@ var/list/admin_verbs_mentor = list(
 	/client/proc/cmd_admin_subtle_message
 )
 
+var/list/admin_verbs_wl = list(
+	/client/proc/cmd_admin_add_to_wl,
+	/client/proc/cmd_admin_remove_from_wl,
+	/client/proc/cmd_admin_ban_from_wl
+)
+
 /client/proc/add_admin_verbs()
 	if(holder)
 		verbs += admin_verbs_default
@@ -341,6 +347,7 @@ var/list/admin_verbs_mentor = list(
 		if(holder.rights & R_SPAWN)			verbs += admin_verbs_spawn
 		if(holder.rights & R_MOD)			verbs += admin_verbs_mod
 		if(holder.rights & R_MENTOR)		verbs += admin_verbs_mentor
+		if(holder.rights & R_WL)			verbs += admin_verbs_wl
 
 /client/proc/remove_admin_verbs()
 	verbs.Remove(
@@ -357,7 +364,8 @@ var/list/admin_verbs_mentor = list(
 		admin_verbs_rejuv,
 		admin_verbs_sounds,
 		admin_verbs_spawn,
-		debug_verbs
+		debug_verbs,
+		admin_verbs_wl
 		)
 
 /client/proc/hide_most_verbs()//Allows you to keep some functionality while hiding some verbs
