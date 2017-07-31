@@ -76,7 +76,7 @@
 		var/counter = 0
 		while(select_query.NextRow())
 			counter++
-		if(counter > 2)
+		if(counter > 1)
 			return 0
 
 	var/DBQuery/query = dbcon.NewQuery("INSERT INTO whitelist (ckey, host) VALUES ('[pckey]', '[host? "[host]" : "root"]')")
