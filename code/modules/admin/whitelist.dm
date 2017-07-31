@@ -2,7 +2,7 @@
 	set category = "OOC"
 	set name = "Invite to Whitelist"
 
-	var/response = alert(src, "Are you sure you want to invite [pckey] into the whitelist?", "You may invite only 2 users.", "Yes", "No")
+	var/response = alert(src, "Are you sure you want to invite [pckey] to the whitelist?", "You may invite only 2 users.", "Yes", "No")
 
 	var/host = ckey
 	if(response == "Yes")
@@ -77,12 +77,10 @@
 		while(select_query.NextRow())
 			if(select_query.item[1])
 				counter++
-			if(select_query.item[2])
-				counter++
 		if(counter > 2)
 			return 0
 
-	var/DBQuery/query = dbcon.NewQuery("INSERT INTO whitelist ('ckey', 'host') VALUES ('[pckey]', '[host? "[host]" : "root"]')")
+	var/DBQuery/query = dbcon.NewQuery("INSERT INTO whitelist (ckey, host) VALUES ('[pckey]', '[host? "[host]" : "root"]')")
 	query.Execute()
 	message_admins("[pckey] was added into the whitelist by [usr]")
 	return 1
@@ -99,18 +97,12 @@
 
 	var/DBQuery/select_query = dbcon.NewQuery("SELECT ckey FROM whitelist WHERE (host = '[pckey]')")
 	select_query.Execute()
-	var/ckey1
-	var/ckey2
+	var/ckey
 	while(select_query.NextRow())
-		ckey1 = select_query.item[1]
-		ckey2 = select_query.item[2]
-
-	if(ckey1)
-		var/DBQuery/query = dbcon.NewQuery("UPDATE whitelist SET (host = 'root') WHERE (ckey = '[ckey1]')")
-		query.Execute()
-	if(ckey2)
-		var/DBQuery/query = dbcon.NewQuery("UPDATE whitelist SET (host = 'root') WHERE (ckey = '[ckey2]')")
-		query.Execute()
+		ckey = select_query.item[1]
+		if(ckey)
+			var/DBQuery/query = dbcon.NewQuery("UPDATE whitelist SET (host = 'root') WHERE (ckey = '[ckey]')")
+			query.Execute()
 
 	var/DBQuery/query = dbcon.NewQuery("DELETE * FROM whitelist WHERE (ckey = '[pckey]')")
 	query.Execute()
@@ -129,18 +121,17 @@
 	var/DBQuery/select_query = dbcon.NewQuery("SELECT ckey FROM whitelist WHERE (host = '[pckey]')")
 	select_query.Execute()
 	var/ckey1
-	var/ckey2
 	while(select_query.NextRow())
 		ckey1 = select_query.item[1]
-		ckey2 = select_query.item[2]
 
-	if(ckey1)
-		ban_from_WL(ckey1, 1)
-	if(ckey2)
-		ban_from_WL(ckey2, 1)
+		if(ckey1)
+			ban_from_WL(ckey1, 1)
 
 	if(!branch)
 		var/DBQuery/query = dbcon.NewQuery("UPDATE whitelist SET (host = 'banned') WHERE (ckey = '[pckey]')")
+		query.Execute()
+	else
+		var/DBQuery/query = dbcon.NewQuery("DELETE * FROM whitelis WHERE (ckey = '[pckey]')")
 		query.Execute()
 
 	return 1
