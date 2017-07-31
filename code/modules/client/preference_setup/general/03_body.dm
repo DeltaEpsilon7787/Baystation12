@@ -437,13 +437,13 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 			if("Right Hand")
 				limb = BP_R_HAND
 				third_limb = BP_R_ARM
-			/*if("Head")
+			if("Head")
 				limb =        BP_HEAD
 				choice_options = list("Prosthesis")
 			if("Full Body")
 				limb =        BP_CHEST
 				third_limb =  BP_GROIN
-				choice_options = list("Normal","Prosthesis")*/
+				choice_options = list("Normal","Prosthesis")
 
 		var/new_state = input(user, "What state do you wish the limb to be in?") as null|anything in choice_options
 		if(!new_state || !CanUseTopic(user)) return TOPIC_NOACTION
