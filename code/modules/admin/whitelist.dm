@@ -71,12 +71,11 @@
 	if(IsBannedWL(pckey)) return 0
 
 	if(host)
-		var/DBQuery/select_query = dbcon.NewQuery("SELECT ckey FROM whitelist WHERE (host = '[host]')")
+		var/DBQuery/select_query = dbcon.NewQuery("SELECT * FROM whitelist WHERE (host = '[host]')")
 		select_query.Execute()
 		var/counter = 0
 		while(select_query.NextRow())
-			if(select_query.item[1])
-				counter++
+			counter++
 		if(counter > 2)
 			return 0
 
