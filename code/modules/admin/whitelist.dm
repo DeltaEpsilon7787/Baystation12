@@ -46,7 +46,7 @@
 		add_to_WL(cur_ckey)
 
 /proc/InWL(pckey)
-	var/DBQuery/select_query = dbcon.NewQuery("SELECT * FROM whitelist WHERE (ckey = '[pckey]')")
+	var/DBQuery/select_query = dbcon.NewQuery("SELECT ckey, host FROM whitelist WHERE (ckey = '[pckey]')")
 	select_query.Execute()
 	var/ckey
 	var/host
@@ -58,7 +58,7 @@
 	return 0
 
 /proc/IsBannedWL(pckey)
-	var/DBQuery/select_query = dbcon.NewQuery("SELECT * FROM whitelist WHERE (ckey = '[pckey]')")
+	var/DBQuery/select_query = dbcon.NewQuery("SELECT ckey, host FROM whitelist WHERE (ckey = '[pckey]')")
 	select_query.Execute()
 	var/ckey
 	var/host
