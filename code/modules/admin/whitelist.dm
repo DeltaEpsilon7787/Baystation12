@@ -2,6 +2,9 @@
 	set category = "OOC"
 	set name = "Invite to Whitelist"
 
+	if (!pckey)
+		return
+
 	var/response = alert(src, "Are you sure you want to invite [pckey] to the whitelist?", "You may invite only 2 users.", "Yes", "No")
 
 	var/host = ckey
@@ -46,7 +49,8 @@
 		add_to_WL(cur_ckey)
 
 /proc/InWL(pckey)
-	var/DBQuery/select_query = dbcon.NewQuery("SELECT ckey, host FROM whitelist WHERE (ckey = '[pckey]')")
+	var/dbckey = sql_sanitize_text(pckey)
+	var/DBQuery/select_query = dbcon.NewQuery("SELECT ckey, host FROM whitelist WHERE (ckey = '[dbckey]')")
 	select_query.Execute()
 	var/ckey
 	var/host
@@ -58,14 +62,14 @@
 	return 0
 
 /proc/IsBannedWL(pckey)
-	var/DBQuery/select_query = dbcon.NewQuery("SELECT ckey, host FROM whitelist WHERE (ckey = '[pckey]')")
+	var/dbckey = sql_sanitize_text(pckey)
+	var/DBQuery/select_query = dbcon.NewQuery("SELECT host FROM whitelist WHERE (ckey = '[dbckey]')")
 	select_query.Execute()
-	var/ckey
+
 	var/host
 	while(select_query.NextRow())
-		ckey = select_query.item[1]
-		host = select_query.item[2]
-	if(host == "banned")
+		host = select_query.item[1]
+	if(host && host == "banned")
 		return 1
 	return 0
 
@@ -80,8 +84,10 @@
 	if(InWL(pckey))	return 0
 	if(IsBannedWL(pckey)) return 0
 
+	var/dbhost
 	if(host)
-		var/DBQuery/select_query = dbcon.NewQuery("SELECT * FROM whitelist WHERE (host = '[host]')")
+		dbhost = sql_sanitize_text(host)
+		var/DBQuery/select_query = dbcon.NewQuery("SELECT * FROM whitelist WHERE (host = '[dbhost]')")
 		select_query.Execute()
 		var/counter = 0
 		while(select_query.NextRow())
@@ -89,9 +95,15 @@
 		if(counter > 1)
 			return 0
 
-	var/DBQuery/query = dbcon.NewQuery("INSERT INTO whitelist (ckey, host) VALUES ('[pckey]', '[host? "[host]" : "root"]')")
+	var/dbckey = sql_sanitize_text(pckey)
+	var/DBQuery/query = dbcon.NewQuery("INSERT INTO whitelist (ckey, host) VALUES ('[dbckey]', '[host? "[dbhost]" : "root"]')")
 	query.Execute()
-	message_admins("[pckey] was added into the whitelist by [usr]")
+
+	var/log = "[pckey] was added into the whitelist by [usr] ([host ? "user" : "admin"])."
+	message_admins(log)
+	log_admin(log)
+	whitelist_log_save(log)
+
 	return 1
 
 /proc/remove_from_WL(pckey as text)
@@ -104,7 +116,8 @@
 
 	if(!InWL(pckey))	return 0
 
-	var/DBQuery/select_query = dbcon.NewQuery("SELECT ckey FROM whitelist WHERE (host = '[pckey]')")
+	var/dbckey = sql_sanitize_text(pckey)
+	var/DBQuery/select_query = dbcon.NewQuery("SELECT ckey FROM whitelist WHERE (host = '[dbckey]')")
 	select_query.Execute()
 	var/ckey
 	while(select_query.NextRow())
@@ -115,6 +128,12 @@
 
 	var/DBQuery/query = dbcon.NewQuery("DELETE * FROM whitelist WHERE (ckey = '[pckey]')")
 	query.Execute()
+
+	var/log = "[pckey] has been removed from the whitelist by [usr]."
+	message_admins(log)
+	log_admin(log)
+	whitelist_log_save(log)
+
 	return 1
 
 /proc/ban_from_WL(pckey as text, branch = 0)
@@ -127,7 +146,8 @@
 
 	if(!InWL(pckey))	return 0
 
-	var/DBQuery/select_query = dbcon.NewQuery("SELECT ckey FROM whitelist WHERE (host = '[pckey]')")
+	var/dbckey = sql_sanitize_text(pckey)
+	var/DBQuery/select_query = dbcon.NewQuery("SELECT ckey FROM whitelist WHERE (host = '[dbckey]')")
 	select_query.Execute()
 	var/ckey1
 	while(select_query.NextRow())
@@ -137,10 +157,23 @@
 			ban_from_WL(ckey1, 1)
 
 	if(!branch)
-		var/DBQuery/query = dbcon.NewQuery("UPDATE whitelist SET (host = 'banned') WHERE (ckey = '[pckey]')")
-		query.Execute()
-	else
-		var/DBQuery/query = dbcon.NewQuery("DELETE * FROM whitelis WHERE (ckey = '[pckey]')")
+		var/DBQuery/query = dbcon.NewQuery("UPDATE whitelist SET (host = 'banned') WHERE (ckey = '[dbckey]')")
 		query.Execute()
 
+		var/log = "[pckey] has been banned from the whitelist by [usr]."
+		message_admins(log)
+		log_admin(log)
+		whitelist_log_save(log)
+	else
+		var/DBQuery/query = dbcon.NewQuery("DELETE * FROM whitelis WHERE (ckey = '[dbckey]')")
+		query.Execute()
+
+		var/log = "[pckey] has been removed from the whitelist automaticly."
+		message_admins(log)
+		log_admin(log)
+		whitelist_log_save(log)
+
 	return 1
+
+/proc/whitelist_log_save(var/formatted_log)
+	text2file(formatted_log,"data/whitelist.txt")
