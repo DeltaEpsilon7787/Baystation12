@@ -324,7 +324,8 @@ var/list/admin_verbs_mentor = list(
 var/list/admin_verbs_wl = list(
 	/client/proc/cmd_admin_add_to_wl,
 	/client/proc/cmd_admin_remove_from_wl,
-	/client/proc/cmd_admin_ban_from_wl
+	/client/proc/cmd_admin_ban_from_wl,
+	/client/proc/cmd_admin_add_all
 )
 
 /client/proc/add_admin_verbs()

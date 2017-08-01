@@ -35,6 +35,16 @@
 
 	ban_from_WL(pckey)
 
+/client/proc/cmd_admin_add_all()
+	set category = "Whitelist"
+	set name = "Add all last seen players (60 days)"
+
+	var/DBQuery/query_inactive = dbcon.NewQuery("SELECT ckey, lastseen FROM erro_player WHERE datediff(Now(), lastseen) < 60")
+	query_inactive.Execute()
+	while(query_inactive.NextRow())
+		var/cur_ckey = query_inactive.item[1]
+		add_to_WL(cur_ckey)
+
 /proc/InWL(pckey)
 	var/DBQuery/select_query = dbcon.NewQuery("SELECT * FROM whitelist WHERE (ckey = '[pckey]')")
 	select_query.Execute()
