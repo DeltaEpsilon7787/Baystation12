@@ -21,3 +21,4 @@ config/*
 !config/*/
 .atom-build.json
 maps/exodus/tmp.dmm
+config/example/admins.txt
