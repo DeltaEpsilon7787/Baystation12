@@ -88,18 +88,22 @@ mob/living/carbon/human/update_vision_cone()
 		return
 
 mob/living/carbon/human/proc/check_fov()//For showing and hiding the cone when you rest or lie down.
-	if(!usefov || resting || lying)
+	if(resting || lying)
+		hide_cone(FALSE)
+	else if(!usefov)
 		hide_cone()
 	else
 		show_cone()
 
 //Making these generic procs so you can call them anywhere.
-mob/living/carbon/human/proc/show_cone()
+mob/living/carbon/human/proc/show_cone(var/change_use_fov = 1)
 	if(src.fov)
 		src.fov.alpha = 255
-		usefov = 1
+		if(change_use_fov)
+			usefov = 1
 
-mob/living/carbon/human/proc/hide_cone()
+mob/living/carbon/human/proc/hide_cone(var/change_use_fov = 1)
 	if(src.fov)
 		src.fov.alpha = 0
-		usefov = 0
+		if(change_use_fov)
+			usefov = 0

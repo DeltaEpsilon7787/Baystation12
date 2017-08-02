@@ -52,7 +52,8 @@
 
 /obj/item/weapon/storage/firstaid/regular/New()
 	..()
-	//make_exact_fit()
+//	make_exact_fit()
+
 
 /obj/item/weapon/storage/firstaid/toxin
 	name = "toxin first aid"

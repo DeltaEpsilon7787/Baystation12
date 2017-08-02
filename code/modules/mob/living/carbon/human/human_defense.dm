@@ -344,6 +344,10 @@ meteor_act
 
 //this proc handles being hit by a thrown atom
 /mob/living/carbon/human/hitby(atom/movable/AM as mob|obj,var/speed = THROWFORCE_SPEED_DIVISOR)
+	if(istype(AM, /mob/living))
+		var/chance = prob(50)
+		if(chance) src.Weaken(5)
+		take_impact_damage(AM)
 	if(istype(AM,/obj/))
 		var/obj/O = AM
 
