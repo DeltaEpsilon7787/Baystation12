@@ -13,14 +13,32 @@ mob/var/next_pain_time = 0
 // message is the custom message to be displayed
 // power decides how much painkillers will stop the message
 // force means it ignores anti-spam timer
-mob/living/carbon/proc/custom_pain(var/message, var/power, var/force, var/obj/item/organ/external/affecting)
+mob/living/carbon/proc/custom_pain(var/message, var/power, var/force, var/obj/item/organ/external/affecting, var/nohalloss, var/flash_pain)
 	if(!message || stat || !can_feel_pain() || chem_effects[CE_PAINKILLER] > power)
 		return 0
 
 	// Excessive halloss is horrible, just give them enough to make it visible.
-	if(power)
+	if(!nohalloss && (power || flash_pain))
+		var/actual_flash
 		if(affecting)
 			affecting.add_pain(ceil(power/2))
+			if(power > flash_pain)
+				actual_flash = power
+			else
+				actual_flash = flash_pain
+
+			switch(actual_flash)
+				if(1 to 10)
+					flash_weakest_pain()
+				if(11 to 90)
+					flash_weak_pain()
+					if(prob(50))
+						stuttering += 5
+				if(91 to INFINITY)
+					flash_pain()
+					if(prob(50))
+						agony_scream()
+					stuttering += 10
 		else
 			adjustHalLoss(ceil(power/2))
 
@@ -44,7 +62,7 @@ mob/living/carbon/human/proc/handle_pain()
 	var/obj/item/organ/external/damaged_organ = null
 	for(var/obj/item/organ/external/E in organs)
 		if(!E.can_feel_pain()) continue
-		var/dam = E.get_damage()
+		var/dam = E.get_pain() + E.get_damage()
 		// make the choice of the organ depend on damage,
 		// but also sometimes use one of the less damaged ones
 		if(dam > maxdam && (maxdam == 0 || prob(70)) )
@@ -55,24 +73,34 @@ mob/living/carbon/human/proc/handle_pain()
 			paralysis = max(0, paralysis - round(maxdam/10))
 		if(maxdam > 50 && prob(maxdam / 5))
 			drop_item()
-		//var/burning = damaged_organ.burn_dam > damaged_organ.brute_dam
+		var/burning = damaged_organ.burn_dam > damaged_organ.brute_dam
 		var/msg
-		switch(maxdam)
+		switch(maxdam)//It's important to know that pain counts every single life tick so if you flash pain without a prob here it will flash it every single tick. This causes severe eyestrain.
 			if(1 to 10)
-				//msg =  "Your [damaged_organ.name] [burning ? "burns" : "hurts"]."
-				if(prob(15))
-					flash_weakest_pain()
+				//if(prob(35))
+				msg =  "Your [damaged_organ.name] [burning ? "burns" : "hurts"]."
+				//	flash_weakest_pain()
+
 			if(11 to 90)
-				if(prob(15))
+				/*
+				if(prob(35))
 					flash_weak_pain()
 					stuttering += 5
-				//msg = "<font size=2>Your [damaged_organ.name] [burning ? "burns" : "hurts"] badly!</font>"
+					if(prob(35))
+						agony_moan()
+				*/
+
+				msg = "<font size=2>Your [damaged_organ.name] [burning ? "burns" : "hurts"] badly!</font>"
+
 			if(91 to 10000)
-				if(prob(20))
-					flash_pain()
-					stuttering += 10
-				//msg = "<font size=3>OH GOD! Your [damaged_organ.name] is [burning ? "on fire" : "hurting terribly"]!</font>"
-		custom_pain(msg, 0, prob(10), affecting = damaged_organ)
+				//if(prob(35))
+				//	flash_pain()
+				//	stuttering += 10
+				//	if(prob(35))
+				//		agony_scream()
+
+				msg = "<font size=3>OH GOD! Your [damaged_organ.name] is [burning ? "on fire" : "hurting terribly"]!</font>"
+		custom_pain(msg, 0, prob(10), affecting = damaged_organ, flash_pain = maxdam)
 
 	// Damage to internal organs hurts a lot.
 	for(var/obj/item/organ/I in internal_organs)
@@ -83,9 +111,9 @@ mob/living/carbon/human/proc/handle_pain()
 
 	if(prob(2))
 		switch(getToxLoss())
-			if(1 to 10)
+			if(10 to 25)
 				custom_pain("Your body stings slightly.", getToxLoss())
-			if(11 to 60)
+			if(25 to 45)
 				custom_pain("Your whole body hurts badly.", getToxLoss())
 			if(61 to INFINITY)
 				custom_pain("Your body aches all over, it's driving you mad.", getToxLoss())

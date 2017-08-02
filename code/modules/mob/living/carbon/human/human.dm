@@ -1339,7 +1339,7 @@
 	return 0
 
 /mob/living/carbon/human/slip(var/slipped_on, stun_duration=8)
-	if((species.flags & NO_SLIP) || (shoes && (shoes.item_flags & NOSLIP)))
+	if((species.flags & NO_SLIP) || (shoes && (shoes.item_flags & NOSLIP)) || src.throwing)
 		return 0
 	return !!(..(slipped_on,stun_duration))
 
@@ -1564,25 +1564,8 @@
 			play_xylophone()
 
 /mob/living/carbon/human/throw_impact(atom/hit_atom)
-	var/damage = rand(1, 25)
-	var/smashsound = pick('sound/effects/gore/smash1.ogg', 'sound/effects/gore/smash2.ogg', 'sound/effects/gore/smash3.ogg', 'sound/effects/gore/trauma1.ogg')
-	playsound(loc, smashsound, 50, 1, -1)
-
-	var/blocked = run_armor_check(BP_HEAD,"melee")
-	blocked += run_armor_check(BP_CHEST,"melee")
-	blocked += run_armor_check(BP_GROIN,"melee")
-	blocked += run_armor_check(BP_L_HAND,"melee")
-	blocked += run_armor_check(BP_R_HAND,"melee")
-	blocked += run_armor_check(BP_L_ARM,"melee")
-	blocked += run_armor_check(BP_R_ARM,"melee")
-	blocked += run_armor_check(BP_L_FOOT,"melee")
-	blocked += run_armor_check(BP_R_FOOT,"melee")
-	blocked += run_armor_check(BP_L_LEG,"melee")
-	blocked += run_armor_check(BP_R_LEG,"melee")
-	
-	src.take_organ_damage(damage * (1 - blocked/1100))
-
-	updatehealth()
-	if(damage)
-		hit_atom.add_blood(src)
+	if(istype(hit_atom, /mob/living))
+		var/chance = prob(50)
+		if(chance) src.Weaken(5)
+	take_impact_damage(hit_atom)
 	..()

@@ -25,6 +25,7 @@
 		'nano/images/c_max.gif',
 		'nano/images/nanomapBackground.png',
 		'nano/images/nanomap_z1.png',
+		'nano/images/nanomap_z2.png',
 		'nano/images/uiBackground-Syndicate.png',
 		'nano/images/uiBackground.png',
 		'nano/images/uiBasicBackground.png',

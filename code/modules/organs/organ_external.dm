@@ -231,6 +231,9 @@
 /obj/item/organ/external/proc/dislocate()
 	if(dislocated == -1)
 		return
+		
+	add_pain(src.pain_disability_threshold * 2)
+	take_damage(rand(5,20))
 
 	dislocated = 1
 	if(owner)
@@ -1025,7 +1028,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	return 0
 
 /obj/item/organ/external/is_usable()
-	return ..() && !(status & ORGAN_TENDON_CUT) && (!can_feel_pain() || pain < pain_disability_threshold)
+	return ..() && !(status & ORGAN_TENDON_CUT) && (!can_feel_pain() || pain < pain_disability_threshold) && !is_dislocated()
 
 /obj/item/organ/external/proc/is_malfunctioning()
 	return ((robotic >= ORGAN_ROBOT) && (brute_dam + burn_dam) >= 10 && prob(brute_dam + burn_dam))

@@ -1115,7 +1115,7 @@
 	name = "Beer"
 	id = "beer"
 	description = "An alcoholic beverage made from malted grains, hops, yeast, and water."
-	taste_description = "piss water"
+	taste_description = "lager beer"
 	color = "#FFD300"
 	strength = 50
 	nutriment_factor = 1
