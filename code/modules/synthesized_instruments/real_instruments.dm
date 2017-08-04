@@ -86,7 +86,7 @@
 			edit = text2num(href_list["edit"]) - 1
 
 		else if(href_list["tempo"])
-			if (!isnum(href_list["tempo"]))
+			if (!isnum(text2num(href_list["tempo"])))
 				usr << "<span class='warning'>Tempo is not a number"
 			else
 				player.song.tempo = player.song.sanitize_tempo(player.song.tempo + text2num(href_list["tempo"]))
@@ -231,7 +231,7 @@
 			edit = text2num(href_list["edit"]) - 1
 
 		else if(href_list["tempo"])
-			if (!isnum(href_list["tempo"]))
+			if (!isnum(text2num(href_list["tempo"])))
 				usr << "<span class='warning'>Tempo is not a number"
 			else
 				player.song.tempo = player.song.sanitize_tempo(player.song.tempo + text2num(href_list["tempo"]))
