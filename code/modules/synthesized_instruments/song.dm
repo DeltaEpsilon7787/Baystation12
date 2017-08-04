@@ -117,9 +117,21 @@
 			var/list/cur_accidentals = list("n", "n", "n", "n", "n", "n", "n")
 			var/list/cur_octaves = list(3, 3, 3, 3, 3, 3, 3)
 			var/cur_line = 1
+			if (!lines.len)
+				playing = 0
+				autorepeat = 0
+				break
 			for (var/line in lines)
 				var/cur_note = 1
+				if (!lines.len)
+					playing = 0
+					autorepeat = 0
+					break
 				for (var/notes in splittext(lowertext(line), ","))
+					if (!lines.len)
+						playing = 0
+						autorepeat = 0
+						break
 					var/list/components = splittext(notes, "/")
 					var/delta = components.len==2 && text2num(components[2]) ? text2num(components[2]) : 1
 					var/duration = max(round(sanitize_tempo(tempo / delta)), 1)
@@ -129,6 +141,10 @@
 						playing = 0
 						break
 					for (var/note in note_str)
+						if (!lines.len)
+							playing = 0
+							autorepeat = 0
+							break
 						if (!length(note) >= 1)	continue // Wtf
 						var/note_sym = CP(note, 1)
 						var/note_off = 0
