@@ -337,10 +337,9 @@
 			return
 		go_out()//and release him from the eternal prison.
 	else
-		if (usr.stat != 0)
-			return
-		go_out()
-	add_fingerprint(usr)
+		if (usr.stat == CONSCIOUS && (iscarbon(usr) || issilicon(usr)))
+			go_out()
+			add_fingerprint(usr)
 	return
 
 /obj/machinery/atmospherics/unary/cryo_cell/verb/move_inside()

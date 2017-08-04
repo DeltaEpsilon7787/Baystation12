@@ -79,7 +79,18 @@
 	new /obj/item/weapon/wirecutters(src)
 	new /obj/item/device/t_scanner(src)
 
-
+/obj/item/weapon/storage/belt/janotir
+	name = "janitor belt"
+	desc = "For the King Of Janitors!"
+	icon_state = "janitorbelt"
+	item_state = "janitor"
+	can_hold = list(
+		/obj/item/weapon/reagent_containers/spray,
+		/obj/item/device/lightreplacer,
+		/obj/item/weapon/grenade/chem_grenade,
+		/obj/item/weapon/storage/bag/trash,
+		/obj/item/weapon/soap/nanotrasen
+		)
 
 /obj/item/weapon/storage/belt/medical
 	name = "medical belt"

@@ -25,37 +25,34 @@
 	set category = "Object"
 	set name = "Eject Body Scanner"
 
-	if (usr.stat != 0)
-		return
-	src.go_out()
-	add_fingerprint(usr)
+	if (usr.stat == CONSCIOUS && (iscarbon(usr) || issilicon(usr)))
+		src.go_out()
+		add_fingerprint(usr)
 	return
 
 /obj/machinery/bodyscanner/verb/move_inside()
 	set src in oview(1)
 	set category = "Object"
 	set name = "Enter Body Scanner"
-
-	if (usr.stat != 0)
-		return
-	if (src.occupant)
-		to_chat(usr, "<span class='warning'>The scanner is already occupied!</span>")
-		return
-	if (usr.abiotic())
-		to_chat(usr, "<span class='warning'>The subject cannot have abiotic items on.</span>")
-		return
-	usr.pulling = null
-	usr.client.perspective = EYE_PERSPECTIVE
-	usr.client.eye = src
-	usr.forceMove(src)
-	src.occupant = usr
-	update_use_power(2)
-	src.icon_state = "body_scanner_1"
-	for(var/obj/O in src)
-		//O = null
-		qdel(O)
-		//Foreach goto(124)
-	src.add_fingerprint(usr)
+	if(usr.stat == CONSCIOUS && (iscarbon(usr) || issilicon(usr)))
+		if (src.occupant)
+			to_chat(usr, "<span class='warning'>The scanner is already occupied!</span>")
+			return
+		if (usr.abiotic())
+			to_chat(usr, "<span class='warning'>The subject cannot have abiotic items on.</span>")
+			return
+		usr.pulling = null
+		usr.client.perspective = EYE_PERSPECTIVE
+		usr.client.eye = src
+		usr.forceMove(src)
+		src.occupant = usr
+		update_use_power(2)
+		src.icon_state = "body_scanner_1"
+		for(var/obj/O in src)
+			//O = null
+			qdel(O)
+			//Foreach goto(124)
+		src.add_fingerprint(usr)
 	return
 
 /obj/machinery/bodyscanner/proc/go_out()

@@ -65,3 +65,6 @@
 #define INFECTION_LEVEL_ONE   100
 #define INFECTION_LEVEL_TWO   500
 #define INFECTION_LEVEL_THREE 1000
+
+//Staminaloss value what causes exhaustion
+#define EXHAUSTED_STAMINALOSS 120

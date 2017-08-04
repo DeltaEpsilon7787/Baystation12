@@ -42,7 +42,7 @@ var/global/list/light_type_cache = list()
 		if(istype(fixture, /obj/machinery/light))
 			fixture_type = fixture.type
 		fixture.transfer_fingerprints_to(src)
-		stage = 2
+		stage = 1
 
 	update_icon()
 
