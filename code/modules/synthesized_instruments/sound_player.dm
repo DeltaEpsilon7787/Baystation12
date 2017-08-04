@@ -28,10 +28,9 @@
 
 /obj/sound_player/proc/apply_modifications_for(mob/who, sound/what, note_num, which_line, which_note) // You don't need to override this
 	what.volume = volume - volume*(min(get_dist(src, who)+1, range)/range)**volume_falloff_exponent
-	what.environment = -1
+	what.environment = src.virtual_environment_selected
 	if (three_dimensional_sound)
 		what.falloff = falloff
-		what.environment = src.virtual_environment_selected
 		var/turf/source = get_turf(src)
 		var/turf/receiver = get_turf(who)
 		var/dx = source.x - receiver.x // Hearing from the right/left
@@ -50,9 +49,9 @@
 			continue
 		if (some_hearer.ear_deaf > 0)
 			continue
-		var/dist = get_dist(some_hearer, src)
-		if (dist > forced_sound_in)
-			continue
+		// var/dist = get_dist(some_hearer, src)
+		// if (dist < forced_sound_in)
+		//	continue
 		eligible_mobs += some_hearer
 	return eligible_mobs
 

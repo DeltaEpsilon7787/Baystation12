@@ -16,22 +16,46 @@
 	agony = 10
 	kill_count = 15 //if the shell hasn't hit anything after travelling this far it just explodes.
 	muzzle_type = /obj/effect/projectile/bullet/muzzle
-	var/flash_range = 0
+	var/flash_range = 1
 	var/brightness = 7
 	var/light_colour = "#ffffff"
+	var/stun_strength = 2
 
 /obj/item/projectile/energy/flash/on_impact(var/atom/A)
 	var/turf/T = flash_range? src.loc : get_turf(A)
 	if(!istype(T)) return
 
-	//blind adjacent people
+	// Blind adjacent people
 	for (var/mob/living/carbon/M in viewers(T, flash_range))
-		if(M.eyecheck() < FLASH_PROTECTION_MODERATE)
+		var/eye_safety = M.eyecheck()
+		var/dist = get_dist_euclidian(M, src)
+
+		if (eye_safety < FLASH_PROTECTION_MODERATE)
 			M.flash_eyes()
+			M.Stun(stun_strength * (1 - flash_range / (dist+1)))
+
+	// Deafen adjacent people
+	var/sound_range = max(round(flash_range*1.5), 1)
+	for (var/mob/living/carbon/M in viewers(T, sound_range))
+		var/ear_safety = 0
+		if (ishuman(M)) // Copied from flashbang.dm
+			if(istype(M:l_ear, /obj/item/clothing/ears/earmuffs) || istype(M:r_ear, /obj/item/clothing/ears/earmuffs))
+				ear_safety += 2
+			if(HULK in M.mutations)
+				ear_safety += 1
+			if(istype(M:head, /obj/item/clothing/head/helmet))
+				ear_safety += 1
+		var/dist = get_dist_euclidian(M, src)
+		var/ear_power = 2 * src.stun_strength * max(1 - ear_safety / 2, 0) * (1 - (dist / sound_range))
+		if (ear_power > 0)
+			M << "<span class='danger'>Your ears ring!</span>"
+			M.Weaken(ear_power)
+			M.ear_deaf += rand(ear_power / 2, ear_power)
+			M.ear_damage += rand(0, ear_power / 2)
 
 	//snap pop
-	playsound(src, 'sound/effects/snap.ogg', 50, 1)
-	src.visible_message("<span class='warning'>\The [src] explodes in a bright flash!</span>")
+	playsound(src, 'sound/effects/bang.ogg', 50, 1)
+	src.visible_message("<span class='warning'>\The [src] explodes in a bright flash with loud sound!</span>")
 
 	var/datum/effect/effect/system/spark_spread/sparks = new /datum/effect/effect/system/spark_spread()
 	sparks.set_up(2, 1, T)
@@ -44,8 +68,9 @@
 /obj/item/projectile/energy/flash/flare
 	damage = 10
 	fire_sound = 'sound/weapons/gunshot/shotgun.ogg'
-	flash_range = 2
+	flash_range = 4 // Half a flashbang
 	brightness = 15
+	stun_strength = 5
 
 /obj/item/projectile/energy/flash/flare/on_impact(var/atom/A)
 	light_colour = pick("#e58775", "#ffffff", "#90ff90", "#a09030")
@@ -62,14 +87,16 @@
 	mob_hit_sound = list('sound/weapons/tase.ogg')
 	nodamage = 1
 	taser_effect = 1
-	agony = 60
+	agony = 40
+	stun = 5 // It's a STUNNING weapons for fuck sake. This much time should be enough to close in and stun criminal scum with proper tools.
 	damage_type = PAIN
 	//Damage will be handled on the MOB side, to prevent window shattering.
 
 /obj/item/projectile/energy/electrode/stunshot
 	nodamage = 0
 	damage = 10
-	agony = 80
+	agony = 60
+	stun = 7
 	damage_type = BURN
 
 /obj/item/projectile/energy/declone

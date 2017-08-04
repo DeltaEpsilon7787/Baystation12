@@ -646,7 +646,7 @@ default behaviour is:
 	if(staminaloss)//If we're not doing anything and we've lost stamina we can wait to gain it back.
 		adjustStaminaLoss(-1)
 
-	if(staminaloss >= 120 && !stat)//Oh shit we've lost too much stamina and now we're tired!
+	if(staminaloss >= EXHAUSTED_STAMINALOSS && !stat)//Oh shit we've lost too much stamina and now we're tired!
 		Exhaust()
 		return
 
@@ -658,7 +658,7 @@ default behaviour is:
 	set name = "Resist"
 	set category = "IC"
 	
-	if(src.staminaloss >= 120) 
+	if(src.staminaloss >= EXHAUSTED_STAMINALOSS) 
 		to_chat(src, "<span class='warning'>You're too weak to resist!</span>")
 		return
 	else

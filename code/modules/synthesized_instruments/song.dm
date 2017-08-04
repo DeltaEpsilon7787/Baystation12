@@ -35,6 +35,11 @@
 	return max(round(new_tempo, world.tick_lag), world.tick_lag)
 
 /datum/synthesized_song/proc/occupy_channels()
+	if (!global.musical_free_channels_populated)
+		for (var/i=1, i<=1024, i++) // Currently only 1024 channels are allowed
+			global.musical_free_channels += i
+		global.musical_free_channels_populated = 1 // Only once
+
 	for (var/i=0, i<MUSICAL_CHANNELS, i++)
 		if (global.musical_free_channels.len)
 			free_channel(pick_n_take(global.musical_free_channels))

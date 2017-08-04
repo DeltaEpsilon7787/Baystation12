@@ -57,13 +57,11 @@ var/global/list/musical_all_environments = list(
 			"Dizzy",
 			"Psychotic")
 var/global/list/musical_n2t_int = list() // Instead of num2text it is used for faster access in n2t
-var/global/list/musical_free_channels = list() // Used to take up some channels and avoid istruments cancelling each other
-var/global/list/musical_nn2no = list(0,2,4,5,7,9,11) // Maps note num onto note offset
 
-world/New()
-	..()
-	for (var/i=1, i<=1024, i++) // Currently only 1024 channels are allowed
-		global.musical_free_channels += i
+var/global/list/musical_free_channels = list() // Used to take up some channels and avoid istruments cancelling each other
+var/global/musical_free_channels_populated = 0
+
+var/global/list/musical_nn2no = list(0,2,4,5,7,9,11) // Maps note num onto note offset
 
 proc/n2t(key) // Used in of num2text for faster access in sample_map
 	if (!global.musical_n2t_int.len)

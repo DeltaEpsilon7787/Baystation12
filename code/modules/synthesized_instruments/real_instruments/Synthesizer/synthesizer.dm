@@ -70,8 +70,8 @@
 #undef COMPARE
 
 /obj/structure/synthesized_instrument/synthesizer
-	name = "The Synthesizer 2.2"
-	desc = "This thing is an unholy abomination from the depths of a hell they call <font color='red'>\"Brig\"</font>. The demons in red play this to torture the soul of whoever is damned to this place.<br>This particular version was recovered from the Clown Planet<br>"
+	name = "The Synthesizer 2.5"
+	desc = "This thing looks just as complicated as this entire station."
 	icon = 'synthesizer.dmi'
 	icon_state = "synthesizer"
 	anchored = 1
@@ -348,21 +348,33 @@
 				player.song.instrument_data = instruments[new_instrument]
 
 		if (href_list["change_vol"])
-			player.volume = max(min(player.volume+text2num(href_list["change_vol"]), 100), 0)
+			if (!isnum(text2num(href_list["change_vol"])))
+				usr << "<span class='warning'>Volume delta is not a number"
+			else
+				player.volume = max(min(player.volume+text2num(href_list["change_vol"]), 100), 0)
 
 		if (href_list["transpose"])
-			var/delta = text2num(href_list["transpose"])
-			player.song.transposition = max(min(player.song.transposition+delta, MUSICAL_HIGHEST_TRANSPOSE), MUSICAL_LOWEST_TRANSPOSE)
+			if (!isnum(text2num(href_list["transpose"])))
+				usr << "<span class='warning'>Tranpose delta is not a number"
+			else
+				var/delta = text2num(href_list["transpose"])
+				player.song.transposition = max(min(player.song.transposition+delta, MUSICAL_HIGHEST_TRANSPOSE), MUSICAL_LOWEST_TRANSPOSE)
 
 		if (href_list["change_min_octave"])
-			var/delta = text2num(href_list["change_min_octave"])
-			player.song.octave_range_min = max(min(player.song.octave_range_min+delta, MUSICAL_HIGHEST_OCTAVE), MUSICAL_LOWEST_OCTAVE)
-			player.song.octave_range_max = max(player.song.octave_range_max, player.song.octave_range_min)
+			if (!isnum(text2num(href_list["change_min_octave"])))
+				usr << "<span class='warning'>Min Octave delta is not a number"
+			else
+				var/delta = text2num(href_list["change_min_octave"])
+				player.song.octave_range_min = max(min(player.song.octave_range_min+delta, MUSICAL_HIGHEST_OCTAVE), MUSICAL_LOWEST_OCTAVE)
+				player.song.octave_range_max = max(player.song.octave_range_max, player.song.octave_range_min)
 
 		if (href_list["change_max_octave"])
-			var/delta = text2num(href_list["change_max_octave"])
-			player.song.octave_range_max = max(min(player.song.octave_range_max+delta, MUSICAL_HIGHEST_OCTAVE), MUSICAL_LOWEST_OCTAVE)
-			player.song.octave_range_min = min(player.song.octave_range_max, player.song.octave_range_min)
+			if (!isnum(text2num(href_list["change_max_octave"])))
+				usr << "<span class='warning'>Max Octave delta is not a number"
+			else
+				var/delta = text2num(href_list["change_max_octave"])
+				player.song.octave_range_max = max(min(player.song.octave_range_max+delta, MUSICAL_HIGHEST_OCTAVE), MUSICAL_LOWEST_OCTAVE)
+				player.song.octave_range_min = min(player.song.octave_range_max, player.song.octave_range_min)
 
 		if (href_list["3d_sound"])
 			player.three_dimensional_sound = !player.three_dimensional_sound
@@ -370,11 +382,14 @@
 		if (href_list["change_environment"])
 			var/picked_environment = input(usr, "Select environment. Only works if 3D sound is active") in musical_all_environments
 			if (picked_environment)
-				player.virtual_environment_selected = MUSICAL_ENVIRONMENT_TO_ID(picked_environment)
+				player.virtual_environment_selected = min(max(MUSICAL_ENVIRONMENT_TO_ID(picked_environment), -1), 23)
 
 		if (href_list["sustain_change"])
-			var/delta = text2num(href_list["sustain_change"])
-			player.song.sustain_timer = max(min(player.song.sustain_timer+delta, MUSICAL_LONGEST_TIMER), 1)
+			if (!isnum(text2num(href_list["sustain_change"])))
+				usr << "<span class='warning'>Sustain delta is not a number"
+			else
+				var/delta = text2num(href_list["sustain_change"])
+				player.song.sustain_timer = max(min(player.song.sustain_timer+delta, MUSICAL_LONGEST_TIMER), 1)
 
 		if (href_list["soft_change"])
 			var/new_coeff = input(usr, "from [MUSICAL_SOFTEST_DROP] to [MUSICAL_HARDEST_DROP]") as num
@@ -382,7 +397,10 @@
 				return
 			if (new_coeff > MUSICAL_HARDEST_DROP)
 				return
-			player.song.soft_coeff = new_coeff
+			if (!isnum(new_coeff))
+				usr << "<span class='warning'>Soft change delta is not a number"
+			else
+				player.song.soft_coeff = new_coeff
 
 		if (href_list["toggle_decay"])
 			player.song.linear_decay = !player.song.linear_decay
