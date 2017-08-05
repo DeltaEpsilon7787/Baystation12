@@ -579,6 +579,9 @@
 	icon_state = "Sleep"
 	flags = AREA_RAD_SHIELDED
 
+/area/crew_quarters/fitness
+	name = "\improper Fitness"
+	icon_state = "Sleep"
 /area/crew_quarters/locker
 	name = "\improper Locker Room"
 	icon_state = "locker"
