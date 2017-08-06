@@ -123,10 +123,10 @@
 	while(select_query.NextRow())
 		ckey = select_query.item[1]
 		if(ckey)
-			var/DBQuery/query = dbcon.NewQuery("UPDATE whitelist SET (host = 'root') WHERE (ckey = '[ckey]')")
+			var/DBQuery/query = dbcon.NewQuery("UPDATE whitelist SET host = 'root' WHERE (ckey = '[ckey]')")
 			query.Execute()
 
-	var/DBQuery/query = dbcon.NewQuery("DELETE * FROM whitelist WHERE (ckey = '[pckey]')")
+	var/DBQuery/query = dbcon.NewQuery("DELETE FROM whitelist WHERE (ckey = '[pckey]')")
 	query.Execute()
 
 	var/log = "[pckey] has been removed from the whitelist by [usr]."
@@ -157,7 +157,7 @@
 			ban_from_WL(ckey1, 1)
 
 	if(!branch)
-		var/DBQuery/query = dbcon.NewQuery("UPDATE whitelist SET (host = 'banned') WHERE (ckey = '[dbckey]')")
+		var/DBQuery/query = dbcon.NewQuery("UPDATE whitelist SET host = 'banned' WHERE (ckey = '[dbckey]')")
 		query.Execute()
 
 		var/log = "[pckey] has been banned from the whitelist by [usr]."
@@ -165,7 +165,7 @@
 		log_admin(log)
 		whitelist_log_save(log)
 	else
-		var/DBQuery/query = dbcon.NewQuery("DELETE * FROM whitelis WHERE (ckey = '[dbckey]')")
+		var/DBQuery/query = dbcon.NewQuery("DELETE FROM whitelis WHERE (ckey = '[dbckey]')")
 		query.Execute()
 
 		var/log = "[pckey] has been removed from the whitelist automaticly."
