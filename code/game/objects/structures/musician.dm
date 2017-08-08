@@ -209,6 +209,8 @@
 
 	var/turf/source = get_turf(src)
 	for(var/mob/M in hearers(15, source))
+		if (!M.is_preference_enabled(/datum/client_preference/hear_instruments))
+			continue
 		M.playsound_local(source, file(soundfile), 100, falloff = 5)
 
 
