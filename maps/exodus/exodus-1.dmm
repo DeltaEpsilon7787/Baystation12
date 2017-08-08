@@ -322,7 +322,7 @@
 "gj" = (/obj/machinery/door/airlock/maintenance{req_access = list(12)},/obj/machinery/door/firedoor/border_only,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"; pixel_y = 0},/turf/simulated/floor/plating,/area/maintenance/sub/fore)
 "gk" = (/obj/structure/table/steel,/obj/item/device/flashlight/lamp,/turf/simulated/floor/reinforced,/area/security/prison/punishment)
 "gl" = (/turf/simulated/floor/reinforced,/area/security/prison/punishment)
-"gm" = (/obj/structure/synthesized_instrument/synthesizer{color = "#9900ff"; desc = "State-of-the-art interrogation device, this horrible piece machinery is able to project sound right into the mind of sentient being around it, easening sound torture. Also known as the Synthesizer. It's violet."; name = "psi emitter"},/turf/simulated/floor/reinforced,/area/security/prison/punishment)
+"gm" = (/obj/structure/synthesized_instrument/synthesizer/mindbreaker{color = "#9900ff"; desc = "State-of-the-art interrogation device, this horrible piece machinery is able to project sound right into the mind of sentient being around it, easening sound torture. Also known as the Synthesizer. It's violet."; name = "psi emitter"},/turf/simulated/floor/reinforced,/area/security/prison/punishment)
 "gn" = (/obj/effect/floor_decal/industrial/warning{icon_state = "warning"; dir = 8},/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,/obj/machinery/camera/network/engineering{c_tag = "Security - Advanced Interrogation"; dir = 8; network = list("Security")},/turf/simulated/floor/plating,/area/security/prison/punishment)
 "go" = (/turf/simulated/floor/tiled/dark,/area/security/prison/punishment)
 "gp" = (/obj/effect/floor_decal/corner/red{dir = 5},/turf/simulated/floor/tiled/dark,/area/security/prison/punishment)

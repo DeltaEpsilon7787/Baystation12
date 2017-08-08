@@ -1,5 +1,5 @@
 /obj/sound_player/synthesizer
-	forced_sound_in = 4
+	forced_sound_in = 0
 	var/list/datum/music_code/code = list()
 
 	apply_modifications_for(mob/who, sound/what, which, where, which_one)
@@ -9,6 +9,8 @@
 				var/datum/sample_pair/pair = cond.instrument.sample_map[n2t(which)]
 				what.file = pair.sample
 
+/obj/sound_player/synthesizer/torture
+	forced_sound_in = 2
 
 #define LESSER 1
 #define EQUAL 2
@@ -88,7 +90,7 @@
 			if (!new_instrument.id) continue
 			new_instrument.create_full_sample_deviation_map()
 			instruments[new_instrument.name] = new_instrument
-		player = new /obj/sound_player/synthesizer (src, instruments[pick(instruments)])
+		player = new /obj/sound_player/synthesizer(src, instruments[pick(instruments)])
 
 	attackby(obj/item/O, mob/user, params)
 		if (istype(O, /obj/item/weapon/wrench))
@@ -431,3 +433,8 @@
 				return 1
 			return 0
 		return 1
+
+/obj/structure/synthesized_instrument/synthesizer/mindbreaker
+	New()
+		..()
+		src.player = new /obj/sound_player/synthesizer/torture(src, instruments[pick(instruments)])

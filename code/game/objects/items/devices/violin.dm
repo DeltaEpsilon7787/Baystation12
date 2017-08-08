@@ -191,7 +191,12 @@
 		if("Cn9")	soundfile = 'sound/violin/Cn9.mid'
 		else		return
 
-	sound_to(hearers(15, get_turf(src)), sound(soundfile))
+	// sound_to(hearers(15, get_turf(src)), sound(soundfile))
+
+	for(var/mob/M in hearers(15, src))
+		if (!M.is_preference_enabled(/datum/client_preference/hear_instruments))
+			continue
+		M.playsound_local(src, file(soundfile), 100, falloff = 5)
 
 /obj/item/device/violin/proc/playsong()
 	do

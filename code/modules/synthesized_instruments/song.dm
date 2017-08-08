@@ -113,6 +113,7 @@
 
 /datum/synthesized_song/proc/play_song(mob/user)
 	spawn()
+		player.store_blocked()
 		do
 			var/list/cur_accidentals = list("n", "n", "n", "n", "n", "n", "n")
 			var/list/cur_octaves = list(3, 3, 3, 3, 3, 3, 3)
