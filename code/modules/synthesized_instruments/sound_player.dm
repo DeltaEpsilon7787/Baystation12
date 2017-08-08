@@ -75,3 +75,5 @@
 /obj/sound_player/proc/channel_overload()
 	// Cease playing
 	return 0
+
+#undef REFRESH_FREQUENCY
