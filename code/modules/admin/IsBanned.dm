@@ -11,7 +11,7 @@ world/IsBanned(key,address,computer_id)
 		return list("reason"="guest", "desc"="\nReason: Guests not allowed. Please sign in with a byond account.")
 
 	//Whitelist, Cap
-	if(!InWL(key))
+	if(!InWL(key) && config.honker_wl)
 		log_access("Failed Login: [key] - Not in WL")
 		message_admins("<span class='notice'>Failed Login: [key] - Not in WL</span>")
 		return list("reason"="WL", "desc"="\nReason: You're not in Whitelist.")
