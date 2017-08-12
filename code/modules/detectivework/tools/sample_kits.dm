@@ -149,7 +149,8 @@
 	else
 		to_chat(user, "<span class='warning'>You are unable to locate any [evidence_type]s on \the [A].</span>")
 		. = ..()
-	A.add_fingerprint(user)
+	// A.add_fingerprint(user)
+	// What the fuck, who added this
 
 /obj/item/weapon/forensics/sample_kit/MouseDrop(atom/over)
 	if(ismob(src.loc) && CanMouseDrop(over))

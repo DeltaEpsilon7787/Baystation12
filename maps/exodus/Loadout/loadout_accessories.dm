@@ -76,7 +76,7 @@
 /datum/gear/accessory/brown_vest
 	display_name = "webbing, engineering"
 	path = /obj/item/clothing/accessory/storage/brown_vest
-	allowed_roles = list("Station Engineer","Atmospheric Technician","Chief Engineer")
+	allowed_roles = list("Engineer","Atmospheric Technician","Chief Engineer")
 
 /datum/gear/accessory/black_vest
 	display_name = "webbing, security"
@@ -91,7 +91,7 @@
 /datum/gear/accessory/brown_drop_pouches
 	display_name = "drop pouches, engineering"
 	path = /obj/item/clothing/accessory/storage/drop_pouches/brown
-	allowed_roles = list("Station Engineer","Atmospheric Technician","Chief Engineer")
+	allowed_roles = list("Engineer","Atmospheric Technician","Chief Engineer")
 
 /datum/gear/accessory/black_drop_pouches
 	display_name = "drop pouches, security"

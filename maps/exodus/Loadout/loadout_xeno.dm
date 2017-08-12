@@ -123,4 +123,4 @@
 	whitelisted = list(SPECIES_TAJARA)
 	sort_category = "Xenowear"
 	cost = 1
-	allowed_roles = list("Chief Engineer","Station Engineer","Atmospherics Technician", "Shaft Miner")
+	allowed_roles = list("Chief Engineer","Engineer","Atmospherics Technician", "Shaft Miner")

@@ -135,15 +135,20 @@
 /obj/item/projectile/bullet/pistol/medium/smg
 	fire_sound = 'sound/weapons/gunshot/gunshot_smg.ogg'
 
+/obj/item/projectile/bullet/pistol/substrong
+	fire_sound = 'sound/weapons/gunshot/gunshot_strong.ogg'
+	damage = 45
+
 /obj/item/projectile/bullet/pistol/strong //revolvers and matebas
 	fire_sound = 'sound/weapons/gunshot/gunshot_strong.ogg'
-	damage = 60
+	damage = 60 // This doesn't make any fucking sense, a shotgun slug deals less damage
 
 /obj/item/projectile/bullet/pistol/rubber //"rubber" bullets
 	name = "rubber bullet"
 	check_armour = "melee"
 	damage = 5
-	agony = 25
+	agony = 50 // Supposed to inflict much more pain that they are
+	stun = 1 // Traumatic bullets should be able to stop you for a moment
 	embed = 0
 	sharp = 0
 

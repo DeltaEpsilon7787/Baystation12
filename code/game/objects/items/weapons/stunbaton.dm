@@ -12,8 +12,8 @@
 	w_class = ITEM_SIZE_NORMAL
 	origin_tech = list(TECH_COMBAT = 2)
 	attack_verb = list("beaten")
-	var/stunforce = 0
-	var/agonyforce = 60
+	var/stunforce = 3 // More than tazer.
+	var/agonyforce = 20 // Brief pain
 	var/status = 0		//whether the thing is on or not
 	var/obj/item/weapon/cell/bcell
 	var/hitcost = 10

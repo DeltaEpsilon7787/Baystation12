@@ -63,6 +63,10 @@ default behaviour is:
 		now_pushing = 1
 		if (istype(AM, /mob/living))
 			var/mob/living/tmob = AM
+			
+			if(src.throwing)
+				src.throw_impact(tmob)
+				src.throwing = 0
 
 			for(var/mob/living/M in range(tmob, 1))
 				if(tmob.pinned.len ||  ((M.pulling == tmob && ( tmob.restrained() && !( M.restrained() ) && M.stat == 0)) || locate(/obj/item/weapon/grab, tmob.grabbed_by.len)) )
@@ -380,6 +384,27 @@ default behaviour is:
 	adjustFireLoss(burn)
 	src.updatehealth()
 
+/mob/living/proc/take_impact_damage(atom/movable/AM as mob|obj)
+	var/damage = rand(1, 25)
+	var/smashsound = pick('sound/effects/gore/smash1.ogg', 'sound/effects/gore/smash2.ogg', 'sound/effects/gore/smash3.ogg', 'sound/effects/gore/trauma1.ogg')
+	playsound(loc, smashsound, 50, 1, -1)
+	switch(rand(0, 10))
+		if(0) src.apply_damage(damage, BRUTE, BP_HEAD, run_armor_check(BP_HEAD,"melee"))
+		if(1) src.apply_damage(damage, BRUTE, BP_CHEST, run_armor_check(BP_CHEST,"melee"))
+		if(2) src.apply_damage(damage, BRUTE, BP_GROIN, run_armor_check(BP_GROIN,"melee"))
+		if(3) src.apply_damage(damage, BRUTE, BP_L_HAND, run_armor_check(BP_L_HAND,"melee"))
+		if(4) src.apply_damage(damage, BRUTE, BP_R_HAND, run_armor_check(BP_R_HAND,"melee"))
+		if(5) src.apply_damage(damage, BRUTE, BP_L_ARM, run_armor_check(BP_L_ARM,"melee"))
+		if(6) src.apply_damage(damage, BRUTE, BP_R_ARM, run_armor_check(BP_R_ARM,"melee"))
+		if(7) src.apply_damage(damage, BRUTE, BP_L_FOOT, run_armor_check(BP_L_FOOT,"melee"))
+		if(8) src.apply_damage(damage, BRUTE, BP_R_FOOT, run_armor_check(BP_R_FOOT,"melee"))
+		if(9) src.apply_damage(damage, BRUTE, BP_L_LEG, run_armor_check(BP_L_LEG,"melee"))
+		if(10) src.apply_damage(damage, BRUTE, BP_R_LEG, run_armor_check(BP_R_LEG,"melee"))
+
+	updatehealth()
+	if(damage)
+		AM.add_blood(src)
+
 // heal MANY external organs, in random order
 /mob/living/proc/heal_overall_damage(var/brute, var/burn)
 	adjustBruteLoss(-brute)
@@ -621,7 +646,7 @@ default behaviour is:
 	if(staminaloss)//If we're not doing anything and we've lost stamina we can wait to gain it back.
 		adjustStaminaLoss(-1)
 
-	if(staminaloss >= 120 && !stat)//Oh shit we've lost too much stamina and now we're tired!
+	if(staminaloss >= EXHAUSTED_STAMINALOSS && !stat)//Oh shit we've lost too much stamina and now we're tired!
 		Exhaust()
 		return
 
@@ -632,7 +657,13 @@ default behaviour is:
 /mob/living/verb/resist()
 	set name = "Resist"
 	set category = "IC"
-
+	
+	if(src.staminaloss >= EXHAUSTED_STAMINALOSS) 
+		to_chat(src, "<span class='warning'>You're too weak to resist!</span>")
+		return
+	else
+		src.adjustStaminaLoss(rand(20,60))
+		
 	if(!incapacitated(INCAPACITATION_KNOCKOUT) && canClick())
 		setClickCooldown(20)
 		resist_grab()

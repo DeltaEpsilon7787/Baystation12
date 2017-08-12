@@ -177,6 +177,13 @@
 		return 1
 	return 0
 
+/mob/living/carbon/human/proc/legcuffed()
+	if (istype(src.shoes, /obj/item/clothing/shoes/orange))
+		var/obj/item/clothing/shoes/orange/S = src.shoes
+		return S.chained == null ? 0 : 1
+	else
+		return 0
+
 /mob/living/carbon/human/var/co2overloadtime = null
 /mob/living/carbon/human/var/temperature_resistance = T0C+75
 
@@ -1332,7 +1339,7 @@
 	return 0
 
 /mob/living/carbon/human/slip(var/slipped_on, stun_duration=8)
-	if((species.flags & NO_SLIP) || (shoes && (shoes.item_flags & NOSLIP)))
+	if((species.flags & NO_SLIP) || (shoes && (shoes.item_flags & NOSLIP)) || src.throwing)
 		return 0
 	return !!(..(slipped_on,stun_duration))
 
@@ -1396,7 +1403,6 @@
 	..()
 	if(update_hud)
 		handle_regular_hud_updates()
-
 
 /mob/living/carbon/human/can_stand_overridden()
 	if(wearing_rig && wearing_rig.ai_can_move_suit(check_for_ai = 1))
@@ -1558,24 +1564,8 @@
 			play_xylophone()
 
 /mob/living/carbon/human/throw_impact(atom/hit_atom)
-	if(iswall(hit_atom))
-		var/damage = rand(0, 10)
-		var/smashsound = pick('sound/effects/gore/smash1.ogg', 'sound/effects/gore/smash2.ogg', 'sound/effects/gore/smash3.ogg', 'sound/effects/gore/trauma1.ogg')
-		playsound(loc, smashsound, 50, 1, -1)
-
-		var/blocked = run_armor_check(BP_HEAD,"melee")
-		apply_damage(damage, BRUTE, BP_HEAD, blocked)
-
-		blocked = run_armor_check(BP_CHEST,"melee")
-		apply_damage(damage, BRUTE, BP_CHEST, blocked)
-
-		blocked = run_armor_check(BP_GROIN,"melee")
-		apply_damage(damage, BRUTE, BP_GROIN, blocked)
-
-		updatehealth()
-		if(damage)
-			hit_atom.add_blood(src)
-		..()
-
-	else
-		..()
+	if(istype(hit_atom, /mob/living))
+		var/chance = prob(50)
+		if(chance) src.Weaken(5)
+	take_impact_damage(hit_atom)
+	..()

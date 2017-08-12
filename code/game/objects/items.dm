@@ -630,7 +630,9 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 				user.client.pixel_y = 0
 
 		user.visible_message("\The [user] peers through the [zoomdevicename ? "[zoomdevicename] of [src]" : "[src]"].")
-		user.hide_cone()
+		if(ishuman(user))
+			var/mob/living/carbon/human/HM = user
+			HM.hide_cone()
 
 	else
 		user.client.view = world.view
@@ -643,8 +645,9 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 
 		if(!cannotzoom)
 			user.visible_message("[zoomdevicename ? "\The [user] looks up from [src]" : "\The [user] lowers [src]"].")
-			user.show_cone()
-
+			if(ishuman(user))
+				var/mob/living/carbon/human/HM = user
+				HM.show_cone()
 	return
 
 /obj/item/proc/pwr_drain()

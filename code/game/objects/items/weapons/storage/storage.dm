@@ -105,7 +105,7 @@
 //This proc return 1 if the item can be picked up and 0 if it can't.
 //Set the stop_messages to stop it from printing messages
 /obj/item/weapon/storage/proc/can_be_inserted(obj/item/W, mob/user, stop_messages = 0)
-	if(!istype(W)) return //Not an item
+	if(!istype(W) || istype(W, /obj/item/weapon/storage/backpack)) return //Not an item
 
 	if(user && user.isEquipped(W) && !user.canUnEquip(W))
 		return 0

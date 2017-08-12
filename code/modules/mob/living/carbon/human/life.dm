@@ -1219,7 +1219,10 @@
 	..()
 	if(machine_visual && machine_visual != A)
 		machine_visual.remove_visual(src)
-
+	if(!isnull(A))
+		hide_cone()
+	else
+		check_fov()
 /mob/living/carbon/human/handle_vision()
 	if(client)
 		client.screen.Remove(global_hud.nvg, global_hud.thermal, global_hud.meson, global_hud.science)

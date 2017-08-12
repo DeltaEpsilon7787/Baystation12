@@ -208,7 +208,7 @@ its easier to just keep the beam vertical.
 	if(!isobserver(user))
 		user.visible_message("<font size=1>[user.name] looks at [src].</font>")
 
-		if(get_dist(user,src) > 5)//Don't get descriptions of things far away.
+		if(get_dist(user,src) > 5 && !isobserver(user))//Don't get descriptions of things far away.
 			to_chat(user, "<span class='info'>It's too far away to see clearly.</span>")
 			return
 
@@ -381,11 +381,19 @@ its easier to just keep the beam vertical.
 /atom/proc/InsertedContents()
 	return contents
 
-
 //Kicking
 /atom/proc/kick_act(mob/living/carbon/human/user)
-	if(!Adjacent(user))//They're not adjcent to us so we can't kick them.
+	//They're not adjcent to us so we can't kick them. Can't kick in straightjacket or while being incapacitated (except lying), can't kick while legcuffed or while being locked in closet
+	if(!Adjacent(user) || user.incapacitated(INCAPACITATION_STUNNED|INCAPACITATION_KNOCKOUT|INCAPACITATION_BUCKLED_PARTIALLY|INCAPACITATION_BUCKLED_FULLY) \
+		|| istype(user.wear_suit, /obj/item/clothing/suit/straight_jacket) || user.legcuffed() || istype(user.loc, /obj/structure/closet))
 		return
+
+	if(user.handcuffed && prob(45) && !user.incapacitated(INCAPACITATION_FORCELYING))//User can fail to kick smbd if cuffed
+		user.visible_message("<span class='danger'>[user.name] loses \his balance while trying to kick \the [src].</span>", \
+					"<span class='warning'> You lost your balance.</span>")
+		user.Weaken(5)
+		return
+
 	if(user.middle_click_intent == "kick")//We're in kick mode, we can kick.
 		for(var/limbcheck in list(BP_L_LEG,BP_R_LEG))//But we need to see if we have legs.
 			var/obj/item/organ/affecting = user.get_organ(limbcheck)
@@ -397,7 +405,9 @@ its easier to just keep the beam vertical.
 
 //Jumping
 /atom/proc/jump_act(atom/target, mob/living/carbon/human/user)
-	if(user.lying && isinspace(user.loc))//No jumping on the ground dummy && No jumping in space
+	//No jumping on the ground dummy && No jumping in space && No jumping in straightjacket or while being incapacitated (except handcuffs) && No jumping vhile being legcuffed or locked in closet
+	if(user.incapacitated(INCAPACITATION_STUNNED|INCAPACITATION_KNOCKOUT|INCAPACITATION_BUCKLED_PARTIALLY|INCAPACITATION_BUCKLED_FULLY|INCAPACITATION_FORCELYING) || user.isinspace() \
+		|| istype(user.wear_suit, /obj/item/clothing/suit/straight_jacket) || user.legcuffed() || istype(user.loc, /obj/structure/closet))
 		return
 
 	for(var/limbcheck in list(BP_L_LEG,BP_R_LEG))//But we need to see if we have legs.

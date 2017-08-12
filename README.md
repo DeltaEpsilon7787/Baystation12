@@ -1,6 +1,6 @@
 # baystation12
 
-[![Build Status](https://travis-ci.org/animusdev/GreenBay.svg?branch=dev)](https://travis-ci.org/animusdev/GreenBay)
+[![Build Status](https://travis-ci.org/animusdev/InterBay.svg?branch=dev)](https://travis-ci.org/animusdev/InterBay)
 
 [Website](http://baystation12.net/) - [Code](http://github.com/Baystation12/Baystation12/) - [IRC](irc://irc.sorcery.net/#codershuttle)
 
