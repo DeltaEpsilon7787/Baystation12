@@ -79,7 +79,7 @@
 	new /obj/item/weapon/wirecutters(src)
 	new /obj/item/device/t_scanner(src)
 
-/obj/item/weapon/storage/belt/janotir
+/obj/item/weapon/storage/belt/janitor
 	name = "janitor belt"
 	desc = "For the King Of Janitors!"
 	icon_state = "janitorbelt"
