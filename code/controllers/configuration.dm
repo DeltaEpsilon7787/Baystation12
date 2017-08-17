@@ -226,6 +226,7 @@ var/list/gamemode_cache = list()
 	var/radiation_lower_limit = 0.35 //If the radiation level for a turf would be below this, ignore it.
 
 	var/autostealth = 0 // Staff get automatic stealth after this many minutes
+	var/honker_wl = 0
 
 /datum/configuration/New()
 	var/list/L = typesof(/datum/game_mode) - /datum/game_mode
@@ -744,6 +745,9 @@ var/list/gamemode_cache = list()
 
 				if("radiation_lower_limit")
 					radiation_lower_limit = text2num(value)
+
+				if("honker_wl")
+					config.honker_wl = 1
 
 				else
 					log_misc("Unknown setting in configuration: '[name]'")

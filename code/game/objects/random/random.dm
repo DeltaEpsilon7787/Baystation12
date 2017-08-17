@@ -1070,6 +1070,16 @@ something, make sure it's not in one of the other lists.*/
 					/obj/item/weapon/rig/unathi,\
 					/obj/item/weapon/rig/unathi/fancy)
 
+/obj/random/instrument
+	name = "Random Musical Device"
+	desc = "This is a random instrument control module."
+	icon = 'icons/obj/musician.dmi'
+	icon_state = "piano"
+	item_to_spawn()
+		return pick(/obj/structure/device/piano,\
+					/obj/structure/synthesized_instrument/synthesizer,\
+					/obj/machinery/media/jukebox)
+
 /*
 	Selects one spawn point out of a group of points with the same ID and asks it to generate its items
 */
