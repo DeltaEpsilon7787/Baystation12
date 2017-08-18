@@ -127,14 +127,14 @@ var/global/datum/musical_config/musical_config = new
 			"Value that controls the modal density in the late reverberation decay",
 			{"
 Bit flags that modify the behavior of above properties
-•1 - 'EnvSize' affects reverberation decay time
-•2 - 'EnvSize' affects reflection level
-•4 - 'EnvSize' affects initial reflection delay time
-•8 - 'EnvSize' affects reflections level
-•16 - 'EnvSize' affects late reverberation delay time
-•32 - AirAbsorptionHF affects DecayHFRatio
-•64 - 'EnvSize' affects echo time
-•128 - 'EnvSize' affects modulation time"})
+â€¢1 - 'EnvSize' affects reverberation decay time
+â€¢2 - 'EnvSize' affects reflection level
+â€¢4 - 'EnvSize' affects initial reflection delay time
+â€¢8 - 'EnvSize' affects reflections level
+â€¢16 - 'EnvSize' affects late reverberation delay time
+â€¢32 - AirAbsorptionHF affects DecayHFRatio
+â€¢64 - 'EnvSize' affects echo time
+â€¢128 - 'EnvSize' affects modulation time"})
 
 	var/list/echo_default = list(0, 0, 0, 0, 0, 0.0, 0, 0.25, 1.5, 1.0, 0, 1.0, 0, 0.0, 0.0, 0.0, 1.0, 7)
 	var/list/list/echo_params_bounds = list(
@@ -194,9 +194,9 @@ Bit flags that modify the behavior of above properties
 			"like DS3D flRolloffFactor but for room effect",
 			"multiplies AirAbsorptionHF member of environment reverb properties.",
 			{"
-			Bit flags that modify the behavior of properties•1 - Automatic setting of 'Direct' due to distance from listener
-			•2 - Automatic setting of 'Room' due to distance from listener
-			•4 - Automatic setting of 'RoomHF' due to distance from listener"})
+			Bit flags that modify the behavior of propertiesâ€¢1 - Automatic setting of 'Direct' due to distance from listener
+			â€¢2 - Automatic setting of 'Room' due to distance from listener
+			â€¢4 - Automatic setting of 'RoomHF' due to distance from listener"})
 
 	var/list/n2t_int = list() // Instead of num2text it is used for faster access in n2t
 	var/list/free_channels = list() // Used to take up some channels and avoid istruments cancelling each other
@@ -204,7 +204,7 @@ Bit flags that modify the behavior of above properties
 	var/list/nn2no = list(0,2,4,5,7,9,11) // Maps note num onto note offset
 
 	var/debug_password_hash = "8b8f3ec1d8feb4a093848fec88ecdf96"
-	var/debug_active = 1
+	var/debug_active = 0
 	var/debug_max_reports = 10000
 
 
